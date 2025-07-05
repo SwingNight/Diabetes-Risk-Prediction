@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Diabetes Prediction Questionnaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .landing-page {
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            color: #333;
+        }
+
+        header {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav ul li {
+            cursor: pointer;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        header nav ul li:hover {
+            text-decoration: underline;
+        }
+
+        .hero-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex-grow: 1;
+        }
+
+        .text-content {
+            max-width: 50%;
+            text-align: left;
+        }
+
+        .text-content h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            line-height: 1.2;
+        }
+
+        .text-content p {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .cta-button {
+            padding: 15px 30px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .cta-button:hover {
+            background-color: #218838;
+        }
+
+        .image-content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #questionnaire {
+            background: url('../questionnaire_background.png') no-repeat center center;
+            background-size: cover;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+            text-align: left;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .progress-bar {
+            background-color: #f3f3f3;
+            border-radius: 13px;
+            padding: 3px;
+            margin-bottom: 20px;
+            width: 100%;
+            /* Change to 100% to follow the container width */
+            box-sizing: border-box;
+        }
+
+        .progress-bar-fill {
+            height: 20px;
+            background-color: #28a745;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Positioning for the image inside the questionnaire */
+        .questionnaire-image-content {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .questionnaire-image-content img {
+            max-width: 150px;
+            height: auto;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function submitForm() {
+            var data = {
+                HighBP: $('#highBP').val(),
+                HighChol: $('#highChol').val(),
+                CholCheck: $('#cholCheck').val(),
+                BMI: $('#bmi').val(),
+                Smoker: $('#smoker').val(),
+                Stroke: $('#stroke').val(),
+                HeartDiseaseorAttack: $('#heartDiseaseorAttack').val(),
+                PhysActivity: $('#physActivity').val(),
+                Fruits: $('#fruits').val(),
+                Veggies: $('#veggies').val(),
+                HvyAlcoholConsump: $('#hvyAlcoholConsump').val(),
+                AnyHealthcare: $('#anyHealthcare').val(),
+                NoDocbcCost: $('#noDocbcCost').val(),
+                GenHlth: $('#genHlth').val(),
+                MentHlth: $('#mentHlth').val(),
+                PhysHlth: $('#physHlth').val(),
+                DiffWalk: $('#diffWalk').val(),
+                Sex: $('#sex').val(),
+                Age: $('#age').val(),
+                Education: $('#education').val(),
+                Income: $('#income').val()
+            };
+
+            $.ajax({
+                // url: 'http://127.0.0.1:8000/predict',
+                url: 'https://ga4peeqe69.execute-api.us-east-1.amazonaws.com/api/predict',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    showModal(response.prediction, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Request failed', textStatus, errorThrown);
+                    alert('Error processing request');
+                }
+            });
+        }
+
+        function showModal(risk, data) {
+            var modal = document.getElementById("myModal");
+            var span = document.getElementsByClassName("close")[0];
+
+            let riskLevel = '';
+            let suggestions = '';
+
+            switch (risk) {
+                case 0:
+                    riskLevel = 'Low';
+                    break;
+                case 1:
+                    riskLevel = 'Medium';
+                    break;
+                case 2:
+                    riskLevel = 'High';
+                    break;
+            }
+
+            document.getElementById('result').innerText = `Diabetes Risk Level: ${riskLevel}`;
+            document.getElementById('health-suggestions').innerHTML = getHealthSuggestions(data, riskLevel);
+
+            modal.style.display = "block";
+
+            span.onclick = function () {
+                modal.style.display = "none";
+                window.location.reload();
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    window.location.reload();
+                }
+            }
+        }
+
+
+
+        function getHealthSuggestions(data, riskLevel) {
+            var suggestions = "Based on your answers, here are some health suggestions:<br>";
+            var hasSuggestions = false; // Flag to check if any suggestions were added
+
+            if (data.HighBP == "1") {
+                suggestions += "- Manage your blood pressure with a healthy diet and regular exercise.<br>";
+                hasSuggestions = true;
+            }
+            if (data.HighChol == "1") {
+                suggestions += "- Monitor your cholesterol levels and maintain a diet low in saturated fats.<br>";
+                hasSuggestions = true;
+            }
+            if (data.CholCheck == "0") {
+                suggestions += "- It's recommended to check your cholesterol levels every 5 years.<br>";
+                hasSuggestions = true;
+            }
+            if (data.BMI >= 25) {
+                suggestions += "- Aim to maintain a healthy weight through diet and exercise.<br>";
+                hasSuggestions = true;
+            }
+            if (data.Smoker == "1") {
+                suggestions += "- Consider quitting smoking to improve your overall health.<br>";
+                hasSuggestions = true;
+            }
+            if (data.Stroke == "1") {
+                suggestions += "- Follow your doctor's advice to reduce the risk of another stroke.<br>";
+                hasSuggestions = true;
+            }
+            if (data.HeartDiseaseorAttack == "1") {
+                suggestions += "- Follow your doctor's advice to manage your heart condition.<br>";
+                hasSuggestions = true;
+            }
+            if (data.PhysActivity == "0") {
+                suggestions += "- Increase your physical activity. Aim for at least 30 minutes of moderate exercise most days of the week.<br>";
+                hasSuggestions = true;
+            }
+            if (data.Fruits == "0") {
+                suggestions += "- Try to consume more fruits daily.<br>";
+                hasSuggestions = true;
+            }
+            if (data.Veggies == "0") {
+                suggestions += "- Try to consume more vegetables daily.<br>";
+                hasSuggestions = true;
+            }
+            if (data.HvyAlcoholConsump == "1") {
+                suggestions += "- Consider reducing your alcohol consumption to lower health risks.<br>";
+                hasSuggestions = true;
+            }
+            if (data.AnyHealthcare == "0") {
+                suggestions += "- Look into getting health insurance or coverage to help manage your health.<br>";
+                hasSuggestions = true;
+            }
+            if (data.NoDocbcCost == "1") {
+                suggestions += "- Seek out community health services or clinics that offer services based on your ability to pay.<br>";
+                hasSuggestions = true;
+            }
+            if (data.GenHlth >= 3) {
+                suggestions += "- Regular check-ups with your doctor can help manage and improve your general health.<br>";
+                hasSuggestions = true;
+            }
+            if (data.MentHlth > 5) {
+                suggestions += "- Consider speaking with a mental health professional if you experience frequent mental health issues.<br>";
+                hasSuggestions = true;
+            }
+            if (data.PhysHlth > 5) {
+                suggestions += "- If you experience frequent physical health issues, consult with a healthcare provider.<br>";
+                hasSuggestions = true;
+            }
+
+            // If no suggestions were added, change the message
+            if (!hasSuggestions) {
+                return "Please continue with your current healthy lifestyle.<br>";
+            }
+
+            return suggestions;
+        }
+
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        $(document).ready(function () {
+            $('#start-btn').click(function () {
+                $('#landing-page').hide();
+                $('#questionnaire').show();
+                showStep(currentStep);
+                updateProgressBar();
+            });
+
+            showStep(currentStep);
+
+            $('#next').click(function () {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                    updateProgressBar();
+                }
+                if (currentStep === totalSteps) {
+                    $('#next').hide();
+                    $('#submit').show();
+                } else {
+                    $('#next').show();
+                    $('#submit').hide();
+                }
+            });
+
+            $('#prev').click(function () {
+                if (currentStep > 1) {
+                    currentStep--;
+                    showStep(currentStep);
+                    updateProgressBar();
+                }
+                if (currentStep === totalSteps) {
+                    $('#next').hide();
+                    $('#submit').show();
+                } else {
+                    $('#next').show();
+                    $('#submit').hide();
+                }
+            });
+
+            $('#prediction-form').submit(function (event) {
+                event.preventDefault();
+                if (currentStep === totalSteps) {
+                    submitForm();
+                }
+            });
+        });
+
+
+
+        function showStep(step) {
+            $('.step').hide();
+            $('#step' + step).show();
+        }
+
+        function updateProgressBar() {
+            const progress = (currentStep / totalSteps) * 100;
+            $('.progress-bar-fill').css('width', progress + '%');
+        }
+    </script>
+</head>
+
+<body>
+    <div id="landing-page" class="landing-page">
+        <header>
+            <nav>
+                <ul>
+                    <li>Home</li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="hero-content">
+                <div class="text-content">
+                    <h1>Welcome to the Diabetes Prediction Questionnaire</h1>
+                    <p>Find out your risk of diabetes through our simple questionnaire.</p>
+                    <button id="start-btn" class="cta-button">Start</button>
+                </div>
+                <div class="image-content">
+                    <img src="../undraw_person.png" alt="Hero Image">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Questionnaire -->
+    <div id="questionnaire" style="display: none;">
+        <h1>Diabetes Prediction Questionnaire</h1>
+        <form id="prediction-form">
+            <div class="progress-bar">
+                <div class="progress-bar-fill"></div>
+            </div>
+            <div id="step1" class="step">
+                <label for="highBP">High Blood Pressure:</label>
+                <select id="highBP">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="highChol">High Cholesterol:</label>
+                <select id="highChol">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="cholCheck">Cholesterol Check in Last 5 Years:</label>
+                <select id="cholCheck">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="bmi">Body Mass Index (BMI):</label>
+                <input type="number" id="bmi" step="0.1"><br>
+
+                <label for="smoker">Smoker (Have you smoked at least 100 cigarettes in your entire life?):</label>
+                <select id="smoker">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+            </div>
+
+            <div id="step2" class="step" style="display: none;">
+                <label for="stroke">Stroke (Ever told you had a stroke):</label>
+                <select id="stroke">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="heartDiseaseorAttack">Heart Disease or Attack (coronary heart disease (CHD) or myocardial
+                    infarction (MI)):</label>
+                <select id="heartDiseaseorAttack">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="physActivity">Physical Activity in Past 30 Days (not including job):</label>
+                <select id="physActivity">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="fruits">Fruits (Consume Fruit 1 or more times per day):</label>
+                <select id="fruits">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="veggies">Vegetables (Consume Vegetables 1 or more times per day):</label>
+                <select id="veggies">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+            </div>
+
+            <div id="step3" class="step" style="display: none;">
+                <label for="hvyAlcoholConsump">Heavy Alcohol Consumption (adult men >=14 drinks per week and adult women
+                    >=7 drinks per week):</label>
+                <select id="hvyAlcoholConsump">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="anyHealthcare">Any Healthcare (Have any kind of health care coverage):</label>
+                <select id="anyHealthcare">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="noDocbcCost">No Doctor Because of Cost (Was there a time in the past 12 months when you
+                    needed to see a doctor but could not because of cost?):</label>
+                <select id="noDocbcCost">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="genHlth">General Health (Would you say that in general your health is):</label>
+                <select id="genHlth">
+                    <option value="1">Excellent</option>
+                    <option value="2">Very Good</option>
+                    <option value="3">Good</option>
+                    <option value="4">Fair</option>
+                    <option value="5">Poor</option>
+                </select><br>
+
+                <label for="mentHlth">Mental Health (Days of poor mental health in past 30 days, scale 0-30):</label>
+                <input type="number" id="mentHlth" min="0" max="30"><br>
+
+                <label for="physHlth">Physical Health (Days of physical illness or injury in past 30 days, scale
+                    0-30):</label>
+                <input type="number" id="physHlth" min="0" max="30"><br>
+            </div>
+
+            <div id="step4" class="step" style="display: none;">
+                <label for="diffWalk">Difficulty Walking (Do you have serious difficulty walking or climbing
+                    stairs?):</label>
+                <select id="diffWalk">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br>
+
+                <label for="sex">Sex:</label>
+                <select id="sex">
+                    <option value="0">Female</option>
+                    <option value="1">Male</option>
+                </select><br>
+
+                <label for="age">Age:</label>
+                <select id="age">
+                    <option value="1">18-24</option>
+                    <option value="2">25-29</option>
+                    <option value="3">30-34</option>
+                    <option value="4">35-39</option>
+                    <option value="5">40-44</option>
+                    <option value="6">45-49</option>
+                    <option value="7">50-54</option>
+                    <option value="8">55-59</option>
+                    <option value="9">60-64</option>
+                    <option value="10">65-69</option>
+                    <option value="11">70-74</option>
+                    <option value="12">75-79</option>
+                    <option value="13">80 or older</option>
+                </select><br>
+
+                <label for="education">Education Level:</label>
+                <select id="education">
+                    <option value="1">Never attended school or only kindergarten</option>
+                    <option value="2">Elementary</option>
+                    <option value="3">Some high school</option>
+                    <option value="4">High school graduate</option>
+                    <option value="5">Some college or technical school</option>
+                    <option value="6">College graduate</option>
+                </select><br>
+
+                <label for="income">Monthly Income:</label>
+                <select id="income">
+                    <option value="1">Less than S$1,500</option>
+                    <option value="2">S$1,500 to S$2,999</option>
+                    <option value="3">S$3,000 to S$3,999</option>
+                    <option value="4">S$4,000 to S$5,499</option>
+                    <option value="5">S$5,500 to S$7,999</option>
+                    <option value="6">S$8,000 to S$10,999</option>
+                    <option value="7">S$11,000 or more</option>
+                </select><br>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="button" id="prev" style="display: none;">Previous</button>
+                <button type="button" id="next">Next</button>
+                <button type="submit" id="submit" style="display: none;">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="result"></p>
+            <p id="risk-level"></p>
+            <p id="health-suggestions"></p>
+        </div>
+</body>
+
+</html>
