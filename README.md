@@ -19,7 +19,7 @@ This project is a web application that allows users to assess their risk of diab
 📁 Site with images      # Frontend assets including HTML, CSS, images
 📁 __pycache__           # Python bytecode cache
 📄 app.py                # Main entry point for backend logic
-📄 requirements.txt      # requirements
+📄 requirements.txt      # Requirements
 ```
 
 ## How It Works
