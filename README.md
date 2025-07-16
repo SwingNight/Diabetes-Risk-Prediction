@@ -32,16 +32,16 @@ This project is a web application that allows users to assess their risk of diab
 ## Example Screenshots
 
 > Start Page  
-> ![Start](Site with images/start.png)
+> ![Start](images/start.png)
 
 > Questionnaire Pages  
-> ![Form Step 1](Site with images/form1.png)
-> ![Form Step 2](Site with images/form2.png)
-> ![Form Step 3](Site with images/form3.png)
-> ![Form Step 4](Site with images/form4.png)
+> ![Form Step 1](images/form1.png)
+> ![Form Step 2](images/form2.png)
+> ![Form Step 3](images/form3.png)
+> ![Form Step 4](images/form4.png)
 
 > Final Result Modal  
-> ![Result](Site with images/result.png)
+> ![Result](images/result.png)
 
 ## Setup Instructions
 
@@ -56,7 +56,7 @@ pip install -r requirements.txt
 ```bash
 chalice deploy
 ```
-or run in local environment
+  or run in local environment
 ```bash
 chalice local
 ```
