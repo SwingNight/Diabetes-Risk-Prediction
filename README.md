@@ -14,12 +14,19 @@ This project is a web application that allows users to assess their risk of diab
 ## Project Structure
 
 ```
-📁 .chalice              # Chalice project files (AWS Lambda, routes, config)
-📁 Model                 # Contains the trained ML model and scaler
-📁 Site with images      # Frontend assets including HTML, CSS, images
-📁 __pycache__           # Python bytecode cache
-📄 app.py                # Main entry point for backend logic
-📄 requirements.txt      # Requirements
+Diabetes-Risk-Prediction/
+├── .chalice/                  # Chalice configuration and routing (used for local/deploy modes)
+├── Model/                     # Trained ML model artifacts
+│   ├── xgb_model.pkl          # Trained XGBoost classifier
+│   ├── scaler.pkl             # StandardScaler used for preprocessing
+│   └── feature_order.json     # Ordered list of input features expected by the model
+├── images/                    # Screenshots for documentation (used in README)
+├── Site with images/          # Static frontend files (HTML, CSS, JS)
+│   └── index.html             # Main UI for the multi-step questionnaire
+├── app.py                     # Backend code using Chalice (handles prediction requests)
+├── requirements.txt           # Python dependencies list
+└── README.md                  # Project documentation
+
 ```
 
 ## How It Works
