@@ -16,12 +16,12 @@ This project is a web application that allows users to assess their risk of diab
 ```
 Diabetes-Risk-Prediction/
 ├── .chalice/                  # Chalice configuration and routing (used for local/deploy modes)
-├── Model/                     # Trained ML model artifacts
+├── model/                     # Trained ML model artifacts
 │   ├── xgb_model.pkl          # Trained XGBoost classifier
 │   ├── scaler.pkl             # StandardScaler used for preprocessing
-│   └── feature_order.json     # Ordered list of input features expected by the model
+│   └── feature.json     # Ordered list of input features expected by the model
 ├── images/                    # Screenshots for documentation (used in README)
-├── Site with images/          # Static frontend files (HTML, CSS, JS)
+├── site with images/          # Static frontend files (HTML, CSS, JS)
 │   └── index.html             # Main UI for the multi-step questionnaire
 ├── app.py                     # Backend code using Chalice (handles prediction requests)
 ├── requirements.txt           # Python dependencies list

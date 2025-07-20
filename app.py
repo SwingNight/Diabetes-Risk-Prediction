@@ -20,7 +20,7 @@ cors_config = CORSConfig(
 # Paths
 MODEL_PATH = 'model/xgb_model.pkl'
 SCALER_PATH = 'model/scaler.pkl'
-FEATURE_ORDER_PATH = 'model/feature_order.json'
+FEATURE_ORDER_PATH = 'model/feature.json'
 
 # Load resources
 try:
